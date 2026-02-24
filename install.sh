@@ -15,7 +15,7 @@ TTY_SPEED="${TTY_SPEED:-115200}"
 PPP_PEER="${PPP_PEER:-gprs}"
 
 echo "== RAK2013 Cellular Installer =="
-echo "Repo: ${SCRIPT_DIR}"
+echo "Installation dir: ${SCRIPT_DIR}"
 echo "TTY: /dev/${TTY_DEV} @ ${TTY_SPEED}"
 echo
 
@@ -48,7 +48,7 @@ sed -i 's/\r$//' /etc/systemd/system/rak2013-enable.service /etc/systemd/system/
 
 systemctl daemon-reload
 
-echo "[5/7] Installing /opt/RAKLTE/rak_pppd (if present in repo)..."
+echo "[5/7] Installing /opt/RAKLTE/rak_pppd..."
 mkdir -p "${INSTALL_DIR}"
 if [ -d "${SCRIPT_DIR}/rak_pppd" ]; then
   rm -rf "${RAK_PPPD_DST}"
@@ -58,7 +58,7 @@ else
   echo "WARN: ${SCRIPT_DIR}/rak_pppd not found; skipping copy."
 fi
 
-echo "[6/7] Generating PPP config via ppp-creator.sh (if available)..."
+echo "[6/7] Generating PPP config via ppp-creator.sh..."
 if [ -x "${RAK_PPPD_DST}/ppp-creator.sh" ]; then
   "${RAK_PPPD_DST}/ppp-creator.sh" "${APN_NAME}" "${TTY_DEV}" "${TTY_SPEED}"
   echo "Generated /etc/ppp/peers/${PPP_PEER} and chatscripts."
@@ -74,7 +74,7 @@ mkdir -p /etc/rak2013
 
 if [ ! -f /etc/rak2013/cellular.conf ]; then
 
-cat <<EOF >/etc/rak2013/cellular.conf
+cat <<'EOF' >/etc/rak2013/cellular.conf
 # RAK2013 Cellular configuration
 
 APN=
