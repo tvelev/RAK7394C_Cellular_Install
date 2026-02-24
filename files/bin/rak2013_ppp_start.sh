@@ -19,12 +19,24 @@ case "$TTY" in
   *) TTY="/dev/$TTY" ;;
 esac
 
+# Wait for UART device to appear (helps after modem power toggle)
+i=0
+while [ ! -e "$TTY" ] && [ $i -lt 30 ]; do
+  i=$((i+1))
+  sleep 1
+done
+
+if [ ! -e "$TTY" ]; then
+  echo "ERROR: UART device not found: $TTY"
+  exit 1
+fi
+
 # Prepare UART for EG95 so chat doesn't time out
 stty -F "$TTY" "$SPEED" raw -echo -ixon -ixoff -crtscts || true
 sleep 1
 
-# Stop any stale session (ignore errors)
-pkill pppd 2>/dev/null || true
+# Stop any stale PPP session for this peer (best-effort)
+pkill -f "pppd call $PEER" 2>/dev/null || true
 sleep 1
 
 # Optional SIM PIN unlock
