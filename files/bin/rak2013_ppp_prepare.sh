@@ -12,9 +12,13 @@ if [ -f "$CONF" ]; then
 fi
 
 APN="${APN:-}"
-TTY="${TTY:-ttyS0}"
+# Prefer serial0 on Raspberry Pi (stable alias for the primary UART)
+TTY="${TTY:-serial0}"
 SPEED="${SPEED:-115200}"
 PPP_PEER="${PPP_PEER:-gprs}"
+
+# Normalize TTY: allow users to set TTY=serial0 or TTY=/dev/serial0
+TTY="${TTY#/dev/}"
 
 STAMP_DIR="/var/lib/rak2013"
 STAMP_FILE="${STAMP_DIR}/ppp-creator.last"
