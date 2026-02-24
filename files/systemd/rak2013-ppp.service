@@ -6,16 +6,18 @@ Wants=network.target
 
 [Service]
 Type=simple
+ExecStartPre=/usr/local/bin/rak2013_ppp_prepare.sh
+ExecStart=/usr/local/bin/rak2013_ppp_start.sh /dev/ttyS0 115200 gprs
+ExecStop=/usr/bin/pkill pppd
+Restart=always
+RestartSec=10
 
-# give modem a moment (enable script already sleeps 30s; this is extra safety)
 ExecStartPre=/bin/sleep 2
 
 ExecStart=/usr/local/bin/rak2013_ppp_start.sh /dev/ttyS0 115200 gprs
 
-# Clean stop
 ExecStop=/usr/bin/pkill pppd
 
-# Keep connection alive (if link drops, systemd restarts pppd)
 Restart=always
 RestartSec=10
 
