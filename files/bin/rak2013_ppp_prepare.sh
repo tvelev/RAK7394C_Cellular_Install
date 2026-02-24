@@ -21,7 +21,7 @@ STAMP_FILE="${STAMP_DIR}/ppp-creator.last"
 
 mkdir -p "$STAMP_DIR"
 
-# If APN is not set, do NOT fail the service; just skip generation.
+# If APN is not set, proceed
 if [ -z "$APN" ]; then
   echo "INFO: APN is empty in ${CONF}. PPP config generation skipped."
   exit 0
@@ -33,7 +33,7 @@ if [ ! -f "$CREATOR" ]; then
   exit 1
 fi
 
-# Fix perms/CRLF (safe)
+# Fix perms/CRLF
 chmod 755 "${RAK_PPPD}"/*.sh 2>/dev/null || true
 chmod 755 "${RAK_PPPD}/wait_pi_hat_and_ppp" 2>/dev/null || true
 sed -i 's/\r$//' "${RAK_PPPD}"/*.sh 2>/dev/null || true
