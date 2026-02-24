@@ -11,7 +11,8 @@ INSTALL_DIR="/opt/RAKLTE"
 RAK_PPPD_DST="${INSTALL_DIR}/rak_pppd"
 
 # Defaults (can be overridden via environment)
-TTY_DEV="${TTY_DEV:-ttyS0}"
+# On Raspberry Pi, serial0 is the stable alias for the primary UART.
+TTY_DEV="${TTY_DEV:-serial0}"
 TTY_SPEED="${TTY_SPEED:-115200}"
 PPP_PEER="${PPP_PEER:-gprs}"
 
@@ -96,7 +97,7 @@ APN=
 PIN=
 
 # UART parameters
-TTY=ttyS0
+TTY=serial0
 SPEED=115200
 
 # PPP profile name (generated at /etc/ppp/peers/<PPP_PEER>)
