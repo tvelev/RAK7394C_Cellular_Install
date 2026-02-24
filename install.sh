@@ -79,9 +79,11 @@ else
   echo "ERROR: Cannot locate Raspberry Pi config.txt (checked /boot/firmware/config.txt and /boot/config.txt)"
 fi
 
-# Prevent getty from grabbing UART (harmless if not present)
-systemctl disable serial-getty@ttyAMA0.service 2>/dev/null || true
-systemctl stop serial-getty@ttyAMA0.service 2>/dev/null || true
+# Prevent getty from grabbing UART used by EG95 (serial0 -> ttyAMA0)
+systemctl disable --now serial-getty@ttyAMA0.service 2>/dev/null || true
+systemctl mask serial-getty@ttyAMA0.service 2>/dev/null || true
+systemctl disable --now serial-getty@serial0.service 2>/dev/null || true
+systemctl disable --now serial-getty@ttyS0.service 2>/dev/null || true
 
 echo "[6/8] Creating configuration file (/etc/rak2013/cellular.conf)..."
 mkdir -p /etc/rak2013
