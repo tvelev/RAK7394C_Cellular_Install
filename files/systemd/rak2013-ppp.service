@@ -1,0 +1,23 @@
+[Unit]
+Description=RAK2013 Cellular PPP Connection
+Requires=rak2013-enable.service
+After=rak2013-enable.service network.target
+Wants=network.target
+
+[Service]
+Type=simple
+
+# give modem a moment (enable script already sleeps 30s; this is extra safety)
+ExecStartPre=/bin/sleep 2
+
+ExecStart=/usr/local/bin/rak2013_ppp_start.sh /dev/ttyS0 115200 gprs
+
+# Clean stop
+ExecStop=/usr/bin/pkill pppd
+
+# Keep connection alive (if link drops, systemd restarts pppd)
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=RAK2013 - Power/Enable EG95 via GPIO
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/rak2013_enable.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
